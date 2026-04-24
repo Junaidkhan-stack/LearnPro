@@ -9,20 +9,28 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.LearnPro"
     },
     "android": {
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "edgeToEdgeEnabled": false,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.anonymous.LearnPro"
     },
     "web": {
       "output": "static",
+      "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -38,7 +46,11 @@
             "backgroundColor": "#000000"
           }
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-video",
+      "expo-audio",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,

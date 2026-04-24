@@ -1,24 +1,60 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+// app/_layout.tsx
+import { Stack, useRouter, useSegments } from "expo-router";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
+import "../global.css";
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+function AuthGate() {
+  const { token, user, isLoading } = useAuth();
+  const segments = useSegments();
+  const router = useRouter();
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+  useEffect(() => {
+    if (isLoading) return; // still loading user info, do nothing
+
+    const inAuthGroup = segments[0] === "(auth)";
+
+    // If not logged in, redirect to login
+    if (!token && !inAuthGroup) {
+      router.replace("/(auth)/login");
+      return;
+    }
+
+    // If logged in and in auth group, redirect based on role
+    if (token && inAuthGroup && user) {
+      switch (user.role) {
+        case "student":
+          router.replace("/(student)/(tabs)");
+          break;
+        case "teacher":
+          router.replace("/(teacher)/(tabs)");
+          break;
+        case "admin":
+          router.replace("/(admin)/(tabs)");
+          break;
+        default:
+          router.replace("/(auth)/login"); // fallback if role unknown
+      }
+    }
+  }, [token, isLoading, user, segments, router]);
+
+  // Loading screen while user info is fetched
+  if (isLoading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-background">
+        <ActivityIndicator size="large" color="#4F46E5" />
+      </View>
+    );
+  }
+
+  return <Stack screenOptions={{ headerShown: false }} />;
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <AuthGate />
+    </AuthProvider>
   );
 }

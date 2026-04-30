@@ -84,7 +84,7 @@ export default function LessonDetail() {
     setUploadingVideo(true);
 
     await axios.put(
-      `http://192.168.1.16:5001/api/lessons/${lessonId}/video`,
+      `http://192.168.1.6:5001/api/lessons/${lessonId}/video`,
       formData,
       {
         headers: {

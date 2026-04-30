@@ -55,7 +55,7 @@ export default function CreateLesson() {
       } as any);
 
       await axios.post(
-        `http://192.168.1.16:5001/api/lessons/create`,
+        `http://192.168.1.6:5001/api/lessons/create`,
         formData,
         {
           headers: {

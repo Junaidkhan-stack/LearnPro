@@ -12,18 +12,20 @@ const userSchema = new mongoose.Schema(
       default: "student", // SYSTEM ASSIGNED
     },
 
-    status: {
-      type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
-    },
-
     isBlocked: {
       type: Boolean,
       default: false,
     },
 
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    otp: String,
+    otpExpires: Date,
+
   },
+
   { timestamps: true },
 );
 

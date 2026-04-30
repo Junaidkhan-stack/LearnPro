@@ -14,7 +14,12 @@ const videoStorage = new CloudinaryStorage({
   },
 });
 
-const videoParser = multer({ storage: videoStorage });
+const videoParser = multer({
+  storage: videoStorage,
+  limits: {
+    fileSize: 100 * 1024 * 1024, // ✅ 100MB limit (IMPORTANT)
+  },
+});
 
 /* ============================
    ASSIGNMENT PDF UPLOAD

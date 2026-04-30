@@ -1,11 +1,33 @@
 const express = require("express");
 const router = express.Router();
 
-const { register, login, getMe } = require("../controllers/auth.controller");
+const {
+  register,
+  verifyEmail,
+  login,
+  getMe,
+  resendOTP,
+  forgotPassword,
+  verifyResetOTP,
+  resetPassword,
+  setPassword
+} = require("../controllers/auth.controller");
+
 const { protect } = require("../middleware/auth.middleware");
 
 /* ================= AUTH ================= */
 router.post("/register", register);
+router.post("/verify", verifyEmail);
+
+router.post("/resend-otp", resendOTP);
+
+/* 🔥 FORGOT PASSWORD FLOW (ADD HERE) */
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-forgot-otp", verifyResetOTP);
+router.post("/reset-password", resetPassword);
+router.post("/set-password", setPassword);
+
+
 router.post("/login", login);
 
 /* ================= PROFILE ================= */

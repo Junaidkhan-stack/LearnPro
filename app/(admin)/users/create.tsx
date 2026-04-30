@@ -18,13 +18,12 @@ export default function CreateUser() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [role, setRole] = useState<"student" | "teacher" | "admin">("student");
 
   const [loading, setLoading] = useState(false);
 
   const handleCreate = async () => {
-    if (!name || !email || !password) {
+    if (!name || !email) {
       Alert.alert("Missing Fields", "Please fill all fields");
       return;
     }
@@ -35,16 +34,22 @@ export default function CreateUser() {
       await api.post("/admin/users/create", {
         name,
         email,
-        password,
         role,
       });
 
-      Alert.alert("Success", "User created successfully");
+      Alert.alert(
+        "Success",
+        "User created successfully.\nAsk them to use 'Forgot Password' to set password."
+      );
 
       router.back();
     } catch (error: any) {
       console.log(error?.response?.data || error);
-      Alert.alert("Error", "Failed to create user");
+
+      Alert.alert(
+        "Error",
+        error?.response?.data?.message || "Failed to create user"
+      );
     } finally {
       setLoading(false);
     }
@@ -62,24 +67,24 @@ export default function CreateUser() {
           paddingBottom: 40,
         }}
       >
-
         {/* HEADER */}
         <View className="mb-6">
           <Text className="text-3xl font-bold text-textPrimary">
             Create User
           </Text>
+
           <Text className="text-textSecondary mt-1">
-            Add a new user to the platform
+            Create a new user account
           </Text>
         </View>
 
         {/* CARD */}
         <View className="bg-surface border border-border rounded-2xl p-5">
-
           {/* NAME */}
           <Text className="text-textSecondary text-xs mb-1">
             Full Name
           </Text>
+
           <TextInput
             value={name}
             onChangeText={setName}
@@ -92,6 +97,7 @@ export default function CreateUser() {
           <Text className="text-textSecondary text-xs mb-1">
             Email Address
           </Text>
+
           <TextInput
             value={email}
             onChangeText={setEmail}
@@ -99,19 +105,6 @@ export default function CreateUser() {
             placeholderTextColor="#9CA3AF"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="bg-background border border-border rounded-xl px-4 py-3 mb-4 text-textPrimary"
-          />
-
-          {/* PASSWORD */}
-          <Text className="text-textSecondary text-xs mb-1">
-            Password
-          </Text>
-          <TextInput
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter password"
-            placeholderTextColor="#9CA3AF"
-            secureTextEntry
             className="bg-background border border-border rounded-xl px-4 py-3 mb-5 text-textPrimary"
           />
 
@@ -121,7 +114,6 @@ export default function CreateUser() {
           </Text>
 
           <View className="flex-row gap-2 mb-6">
-
             {["student", "teacher", "admin"].map((r) => {
               const active = role === r;
 
@@ -158,6 +150,7 @@ export default function CreateUser() {
             ) : (
               <>
                 <Ionicons name="person-add" size={18} color="#fff" />
+
                 <Text className="text-white font-semibold ml-2">
                   Create User
                 </Text>
@@ -166,9 +159,9 @@ export default function CreateUser() {
           </Pressable>
         </View>
 
-        {/* FOOTER NOTE */}
+        {/* FOOTER */}
         <Text className="text-textSecondary text-xs text-center mt-6">
-          New users will receive access based on assigned role
+          User must use "Forgot Password" to set their password
         </Text>
       </ScrollView>
     </SafeAreaView>

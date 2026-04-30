@@ -7,6 +7,8 @@ const user = require("../models/User");
 const Lesson = require("../models/Lesson");
 const Assignment = require("../models/Assignment");
 const Quiz = require("../models/Quiz");
+const { sendInviteEmail } = require("../services/email.service");
+const jwt = require("jsonwebtoken");
 
 /* ================= USERS ================= */
 
@@ -206,9 +208,9 @@ exports.adminUserEnrollmentView = async (req, res) => {
 
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, role } = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !role) {
       return res.status(400).json({ message: "All fields required" });
     }
 
@@ -217,20 +219,19 @@ exports.createUser = async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    // ✅ HASH PASSWORD (THIS WAS MISSING)
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // ✅ Create user WITHOUT real password
     const user = await User.create({
       name,
       email,
-      password: hashedPassword,
+      password: "TEMP_PASSWORD", // placeholder
       role,
+      isVerified: true, // allow forgot password immediately
     });
 
     res.status(201).json({
-      message: "User created successfully",
-      user,
+      message: "User created. Ask user to reset password.",
     });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Error creating user" });

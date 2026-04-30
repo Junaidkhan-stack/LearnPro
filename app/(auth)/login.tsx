@@ -1,11 +1,12 @@
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router"; // ✅ ADDED useRouter
 import { useState } from "react";
 import { api } from "@/services/api";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Login() {
   const { login } = useAuth();
+  const router = useRouter(); // ✅ ADDED
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -91,6 +92,16 @@ export default function Login() {
       >
         <Text className="text-white text-lg font-semibold">
           {loading ? "Logging in..." : "Login"}
+        </Text>
+      </TouchableOpacity>
+
+      {/* 🔥 FORGOT PASSWORD (ADDED ONLY THIS) */}
+      <TouchableOpacity
+        onPress={() => router.push("/(auth)/forgot-password")}
+        className="mt-4"
+      >
+        <Text className="text-primary text-center font-semibold">
+          Forgot Password?
         </Text>
       </TouchableOpacity>
 

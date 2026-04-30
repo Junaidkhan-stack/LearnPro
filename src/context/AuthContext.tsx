@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const bootstrap = async () => {
       try {
+
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
 
         if (storedToken) {
@@ -40,6 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setUser(res.data);
         }
       } catch (err) {
+         console.log("❌ BOOTSTRAP ERROR:", err);
         console.log("❌ Fetch user failed");
       } finally {
         setIsLoading(false);

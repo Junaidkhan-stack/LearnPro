@@ -1,11 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router"; // ✅ added router
 import { useState } from "react";
 import { api } from "@/services/api";
-import { useAuth } from "@/context/AuthContext"; // ✅ ADD THIS
 
 export default function Signup() {
-  const { login } = useAuth(); // ✅ ADD THIS
+  const router = useRouter(); // ✅ added
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,13 +28,13 @@ export default function Signup() {
 
       console.log("✅ Signup response:", res.data);
 
-      // ✅ MOST IMPORTANT FIX
-      await login(res.data.token, res.data.user);
+      // ✅ NEW OTP FLOW
+      Alert.alert("Success", "OTP sent to your email 📩");
 
-      // ❌ REMOVE THIS (VERY IMPORTANT)
-      // router.replace("/login");
-
-      Alert.alert("Success", "Account created successfully ✅");
+      router.push({
+        pathname: "/(auth)/verify",
+        params: { userId: res.data.userId },
+      });
 
     } catch (error: any) {
       console.log("SIGNUP ERROR:", error?.response?.data || error.message);

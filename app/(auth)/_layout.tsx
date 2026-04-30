@@ -8,11 +8,6 @@ export default function AuthLayout() {
         animation: "slide_from_right",
       }}
     >
-      {/* 
-        Screens registered automatically:
-        - login
-        - signup
-      */}
     </Stack>
   );
 }

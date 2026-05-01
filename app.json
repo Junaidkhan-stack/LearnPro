@@ -7,12 +7,13 @@
     "icon": "./assets/images/icon.png",
     "scheme": "learnpro",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.LearnPro"
     },
     "android": {
+       "usesCleartextTraffic": true,
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -55,6 +56,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ace9aba3-9dee-4acf-b83e-4f8a725c04ca"
+      }
     }
   }
 }

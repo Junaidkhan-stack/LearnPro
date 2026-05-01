@@ -1,18 +1,14 @@
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useState, useEffect } from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { api } from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 export default function VerifyScreen() {
   const router = useRouter();
   const { userId } = useLocalSearchParams();
+  const { login } = useAuth();
 
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,20 +32,32 @@ export default function VerifyScreen() {
     }
 
     setLoading(true);
+
     try {
-      await api.post("/auth/verify", {
+      const response = await api.post("/auth/verify", {
         userId,
         otp,
       });
 
+      const { token, user } = response.data;
+
+      // 🔥 Save auth globally
+      await login(token, user);
+
       Alert.alert("Success", "Email verified successfully");
 
-      // 🔥 Auto navigate to login
-      router.replace("/(auth)/login");
+      // 🔥 Redirect based on role
+      if (user.role === "admin") {
+        router.replace("/(admin)/(tabs)");
+      } else if (user.role === "teacher") {
+        router.replace("/(teacher)/(tabs)");
+      } else {
+        router.replace("/(student)/(tabs)");
+      }
     } catch (err: any) {
       Alert.alert(
         "Error",
-        err?.response?.data?.message || "Verification failed"
+        err?.response?.data?.message || "Verification failed",
       );
     } finally {
       setLoading(false);
@@ -104,14 +112,10 @@ export default function VerifyScreen() {
       {/* TIMER / RESEND */}
       <View className="mt-6 items-center">
         {timer > 0 ? (
-          <Text className="text-muted-foreground">
-            Resend OTP in {timer}s
-          </Text>
+          <Text className="text-muted-foreground">Resend OTP in {timer}s</Text>
         ) : (
           <TouchableOpacity onPress={handleResend}>
-            <Text className="text-primary font-semibold">
-              Resend OTP
-            </Text>
+            <Text className="text-primary font-semibold">Resend OTP</Text>
           </TouchableOpacity>
         )}
       </View>

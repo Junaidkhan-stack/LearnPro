@@ -36,7 +36,6 @@ export default function Login() {
       await login(token, user);
     } catch (error: any) {
       console.log("LOGIN ERROR:", error?.response?.data || error.message);
-      
 
       Alert.alert(
         "Login Failed",

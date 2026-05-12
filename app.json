@@ -7,13 +7,13 @@
     "icon": "./assets/images/icon.png",
     "scheme": "learnpro",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.LearnPro"
     },
     "android": {
-       "usesCleartextTraffic": true,
+      "usesCleartextTraffic": true,
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
@@ -51,7 +51,8 @@
       "expo-secure-store",
       "expo-video",
       "expo-audio",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,
